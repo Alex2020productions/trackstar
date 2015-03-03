@@ -31,7 +31,7 @@ class Issue extends CActiveRecord
 
  	const STATUS_NOTSTARTED=0;
  	const STATUS_STARTED=1;
- 	const STATUS_FINISHED=3;
+ 	const STATUS_FINISHED=2;
 
 
  	/**

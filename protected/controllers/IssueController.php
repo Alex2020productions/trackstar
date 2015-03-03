@@ -197,7 +197,6 @@ protected function loadProject($projectID)
 
 		if($this->_project==null)
 		{
-
 			throw new CHttpException(404,'The requested project does not exist.');
 		}
 	}
@@ -215,14 +214,13 @@ protected function loadProject($projectID)
 		public function filterProjectContext($filterChain)
 		{
 			//set the project identified based on the GET input request variables
-			if (isset($GET['pid']))
+			if(isset($GET['pid']))
 				$this->loadProject($_GET['pid']);
 			else
 				throw new CHttpException(403, 'Must specify a project before performing this action');
 
 			//complete the running of other filters and excute the requested action
 				$filterChain->run();
-
 
 		}
 
