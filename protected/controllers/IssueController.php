@@ -15,7 +15,7 @@ class IssueController extends Controller
 	{
 		return array(
 			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
+			'projectContext + create', //check to ensure valid project context 
 		);
 	}
 
@@ -77,6 +77,10 @@ class IssueController extends Controller
 		$this->render('create',array(
 			'model'=>$model,
 		));
+
+		return array(
+			'projectContext - update,view',
+			);
 	}
 
 	/**
@@ -170,4 +174,59 @@ class IssueController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+
+/**
+*@var private property containing the associated project model instance
+*/
+
+private $_project = null;
+
+/**
+* Protected method to load the associated Project model class 
+*@param integer projectID the primary identified of the associated Project
+* @return object the Project data model based on the primary key
+*/
+
+protected function loadProject($projectID)
+{
+	//if the project property is null, create it based on input id 
+	if($this->_project==null)
+	{
+		$this->_project=Project::model()->findByPk($projectID);
+
+		if($this->_project==null)
+		{
+
+			throw new CHttpException(404,'The requested project does not exist.');
+		}
+	}
+
+	return $this->_project;
+
+		}
+
+		/**
+		* In-class defined filther method, configured for use in the above filters()
+		*method. It is called before the actionCreate() method is run in order to ensure a proper project 
+		*context
+		*/
+
+		public function filterProjectContext($filterChain)
+		{
+			//set the project identified based on the GET input request variables
+			if (isset($GET['pid']))
+				$this->loadProject($_GET['pid']);
+			else
+				throw new CHttpException(403, 'Must specify a project before performing this action');
+
+			//complete the running of other filters and excute the requested action
+				$filterChain->run();
+
+
+		}
+
 }
+
+
+

@@ -29,6 +29,10 @@ class Issue extends CActiveRecord
  	const TYPE_FEATURE=1;
  	const TYPE_TASK=2;
 
+ 	const STATUS_NOTSTARTED=0;
+ 	const STATUS_STARTED=1;
+ 	const STATUS_FINISHED=3;
+
 
  	/**
  	  * retrieves a list of issue types
@@ -40,6 +44,15 @@ class Issue extends CActiveRecord
  			self::TYPE_BUG=>'Bug',
  			self::TYPE_FEATURE=>'Feature',
  			self::TYPE_TASK=>'Task',
+ 					 );
+ 	}
+
+ 	public function getStatusOptions()
+ 	{
+ 		return array (
+ 			self::STATUS_NOTSTARTED=>'Not Started',
+ 			self::STATUS_STARTED=>'Started',
+ 			self::STATUS_FINISHED=>'Finished',
  					 );
  	}
 
@@ -66,8 +79,27 @@ class Issue extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, name, description, project_id, type_id, status_id, owner_id, requester_id, create_time, create_user_id, update_time, update_user_id', 'safe', 'on'=>'search'),
+			array('type_id, status_id','in','range'=>self::getAllowedTypeRange()),						
 		);
 	}
+
+	//validates from the numerical value specified above. 
+	public static function getAllowedTypeRange()
+	{
+		return array(
+		//type
+		self::TYPE_BUG,
+		self::TYPE_FEATURE,
+		self::TYPE_TASK,	
+
+		//status 
+		self::STATUS_NOTSTARTED,
+ 		self::STATUS_STARTED,
+ 	    self::STATUS_FINISHED,
+		);
+	}
+
+
 
 	/**
 	 * @return array relational rules.
