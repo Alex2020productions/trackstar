@@ -8,7 +8,7 @@ class ProjectController extends Controller
 	 */
 	public $layout='//layouts/column2';
 
-	* @var CActiveRecord the currently loaded data model instance.
+	/* @var CActiveRecord the currently loaded data model instance.
      */
         private $_model;
 

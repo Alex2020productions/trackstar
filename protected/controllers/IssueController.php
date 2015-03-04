@@ -67,6 +67,9 @@ class IssueController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
+		return array(
+		'projectContext + create', //check to ensure valid project context 
+		);
 		if(isset($_POST['Issue']))
 		{
 			$model->attributes=$_POST['Issue'];
@@ -78,9 +81,7 @@ class IssueController extends Controller
 			'model'=>$model,
 		));
 
-		return array(
-			'projectContext - update,view',
-			);
+		
 	}
 
 	/**
@@ -189,7 +190,7 @@ private $_project = null;
 */
 
 protected function loadProject($projectID)
-{
+	{
 	//if the project property is null, create it based on input id 
 	if($this->_project==null)
 	{
@@ -214,7 +215,7 @@ protected function loadProject($projectID)
 		public function filterProjectContext($filterChain)
 		{
 			//set the project identified based on the GET input request variables
-			if(isset($GET['pid']))
+			if(isset($_GET['pid']))
 				$this->loadProject($_GET['pid']);
 			else
 				throw new CHttpException(403, 'Must specify a project before performing this action');
