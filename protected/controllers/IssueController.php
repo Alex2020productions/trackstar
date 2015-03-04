@@ -63,13 +63,10 @@ class IssueController extends Controller
 	public function actionCreate()
 	{
 		$model=new Issue;
+		$model->project_id=$this->_project->id;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-
-		return array(
-		'projectContext + create', //check to ensure valid project context 
-		);
 		if(isset($_POST['Issue']))
 		{
 			$model->attributes=$_POST['Issue'];
@@ -81,7 +78,9 @@ class IssueController extends Controller
 			'model'=>$model,
 		));
 
-		
+		return array(
+		'projectContext + create', //check to ensure valid project context 
+		);
 	}
 
 	/**
