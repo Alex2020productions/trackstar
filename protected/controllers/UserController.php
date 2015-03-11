@@ -1,17 +1,12 @@
 <?php
 
-class ProjectController extends Controller
+class UserController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-
-	/* @var CActiveRecord the currently loaded data model instance.
-     */
-        private $_model;
-
 
 	/**
 	 * @return array action filters
@@ -56,22 +51,9 @@ class ProjectController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$issueDataProvider=new CActiveDataProvider('Issue',
-			array(
-					'criteria'=>array(
-							'condition'=>'project_id=:projectId',
-							'params'=>array(':projectId'=>$this->loadModel($id)->id),
-									),
-									'pagination'=>array(
-										'pageSize'=>1,
-										),
-							));
-
-							$this->render('view',array(
-								'model'=>$this->loadModel($id),
-								'issueDataProvider'=>$issueDataProvider,
-							));
-
+		$this->render('view',array(
+			'model'=>$this->loadModel($id),
+		));
 	}
 
 	/**
@@ -80,14 +62,14 @@ class ProjectController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Project;
+		$model=new User;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Project']))
+		if(isset($_POST['User']))
 		{
-			$model->attributes=$_POST['Project'];
+			$model->attributes=$_POST['User'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -109,9 +91,9 @@ class ProjectController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Project']))
+		if(isset($_POST['User']))
 		{
-			$model->attributes=$_POST['Project'];
+			$model->attributes=$_POST['User'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -140,7 +122,7 @@ class ProjectController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Project');
+		$dataProvider=new CActiveDataProvider('User');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -151,10 +133,10 @@ class ProjectController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Project('search');
+		$model=new User('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Project']))
-			$model->attributes=$_GET['Project'];
+		if(isset($_GET['User']))
+			$model->attributes=$_GET['User'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -165,12 +147,12 @@ class ProjectController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Project the loaded model
+	 * @return User the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Project::model()->findByPk($id);
+		$model=User::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -178,11 +160,11 @@ class ProjectController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Project $model the model to be validated
+	 * @param User $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='project-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='user-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
